@@ -55,10 +55,10 @@ def generate_report(results: list):
     report += f"🏙️  {nb_visio} cours en visio\n"
     report += f"🏙️  {nb_presentiel} cours en présentiel\n"
     
-    with open(f"{REPORT_PATH}report_{datetime.now().strftime('%Y-%m-%d')}.txt", 'w', encoding='utf-8') as file:
+    with open(f"{REPORT_PATH}report_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.txt", 'w', encoding='utf-8') as file:
         file.write(report)
     
-    write_log(f"🏙️  Rapport généré: {REPORT_PATH}report_{datetime.now().strftime('%Y-%m-%d')}.txt")
+    write_log(f"🏙️  Rapport généré: {REPORT_PATH}report_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.txt")
 
 
 def main():
@@ -141,12 +141,13 @@ Exemples d'utilisation:
                 return 1
             
             result = process_city(args.city)
-            
+            print(result)
+
             if result['students']:
                 print(f"\n✅ Traitement terminé pour {args.city}")
-                print(f"📊 {result['stats']['total']} étudiant(s) traité(s)")
+                print(f"📊 {len(result['students'])} étudiant(s) traité(s)")
                 write_log(f"✅ Traitement terminé pour {args.city}")
-                write_log(f"📊 {result['stats']['total']} étudiant(s) traité(s)")
+                write_log(f"📊 {len(result['students'])} étudiant(s) traité(s)")
             else:
                 print(f"❌ Aucun étudiant trouvé pour {args.city}")
                 write_log(f"❌ Aucun étudiant trouvé pour {args.city}")
@@ -174,9 +175,9 @@ Exemples d'utilisation:
             
             result = process_city(city)
             print(f"✅ Traitement terminé pour {city}")
-            print(f"📊 {result['stats']['total']} étudiant(s) traité(s)")
+            print(f"📊 {len(result['students'])} étudiant(s) traité(s)")
             write_log(f"✅ Traitement terminé pour {city}")
-            write_log(f"📊 {result['stats']['total']} étudiant(s) traité(s)")
+            write_log(f"📊 {len(result['students'])} étudiant(s) traité(s)")
         
         return 0
         
@@ -184,7 +185,9 @@ Exemples d'utilisation:
         write_log("👋 Application interrompue.")
         return 0
     except Exception as e:
+        print(result)
         write_log(f"❌ Erreur fatale: {e}")
+        print(f"❌ Erreur fatale: {e}")
         return 1
 
 
