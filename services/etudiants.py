@@ -1,19 +1,19 @@
-import csv
-from utils import export_to_json
+import os
+from utils import export_to_json, import_from_csv
+from dotenv import load_dotenv
 
-DATA_FILE_PATH = 'data/etudiants.csv'
-EXPORT_PATH = 'exports/'
+load_dotenv()
+DATA_FILE_PATH = os.getenv('DATA_FILE_PATH')
+EXPORT_PATH = os.getenv('EXPORT_PATH')
 
 if __name__ == "__main__":
 
-    etudiants = []
+    students = []
 
     try:
-        with open(DATA_FILE_PATH, 'r', encoding='utf-8') as file: 
-            reader = csv.DictReader(file)
-
-            for row in reader:
-                etudiants.append(row)
+       data = import_from_csv(DATA_FILE_PATH)
+       for row in data:
+           students.append(row)
 
     except FileNotFoundError:
         print(f"Erreur: Le fichier {DATA_FILE_PATH} n'a pas été trouvé.")
@@ -22,11 +22,11 @@ if __name__ == "__main__":
         print(f"Erreur: {e}")
         exit(1)
     
-    ville = input("Entrez la ville à rechercher: ")
+    city = input("Entrez la ville à rechercher: ")
 
-    etudiants_ville = [etudiant for etudiant in etudiants if etudiant['ville'] == ville]
+    students_city = [student for student in students if student['ville'] == city]
 
-    etudiants_ville = sorted(etudiants_ville, key=lambda x: x['age'])
+    students_city = sorted(students_city, key=lambda x: x['age'])
 
-    export_to_json(etudiants_ville, EXPORT_PATH + ville + '.json')
+    export_to_json(students_city, EXPORT_PATH + city + '.json')
 
